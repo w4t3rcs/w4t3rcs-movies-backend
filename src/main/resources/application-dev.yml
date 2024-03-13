@@ -1,0 +1,9 @@
+#Profile
+ACTIVE_PROFILE: dev
+
+#MONGODB
+MONGO_DATABASE: "movie-api-db"
+MONGO_USER: "uimanovmaks"
+MONGO_PASSWORD: "Mu18052007"
+MONGO_CLUSTER: "w4t3rcscluster.vejqsgh.mongodb.net/${MONGO_DATABASE}?retryWrites=true&w=majority&appName=W4t3rcsCluster"
+MONGO_URI: "mongodb+srv://${MONGO_USER}:${MONGO_PASSWORD}@${MONGO_CLUSTER}"
