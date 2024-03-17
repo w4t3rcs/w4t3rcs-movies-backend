@@ -1,9 +1,9 @@
 package com.w4t3rcs.movies;
 
-import com.w4t3rcs.movies.data.dao.GenreRepository;
-import com.w4t3rcs.movies.data.dao.MovieRepository;
-import com.w4t3rcs.movies.data.document.Genre;
-import com.w4t3rcs.movies.data.document.Movie;
+import com.w4t3rcs.movies.dao.GenreRepository;
+import com.w4t3rcs.movies.dao.MovieRepository;
+import com.w4t3rcs.movies.document.Genre;
+import com.w4t3rcs.movies.document.Movie;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

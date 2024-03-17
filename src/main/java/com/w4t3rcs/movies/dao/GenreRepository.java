@@ -1,6 +1,6 @@
-package com.w4t3rcs.movies.data.dao;
+package com.w4t3rcs.movies.dao;
 
-import com.w4t3rcs.movies.data.document.Genre;
+import com.w4t3rcs.movies.document.Genre;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;
 

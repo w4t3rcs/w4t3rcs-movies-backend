@@ -1,7 +1,20 @@
 spring:
   profiles:
     active: "${ACTIVE_PROFILE:dev}"
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true
+  cache:
+    type: redis
+    cache-names: redis-cache
+    redis:
+      time-to-live: 15m
   data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
     mongodb:
       database: ${MONGO_DATABASE}
       uri: ${MONGO_URI}

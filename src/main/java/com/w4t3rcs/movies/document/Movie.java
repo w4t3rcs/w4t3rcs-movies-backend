@@ -1,4 +1,4 @@
-package com.w4t3rcs.movies.data.document;
+package com.w4t3rcs.movies.document;
 
 import lombok.*;
 import org.bson.types.ObjectId;
@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor @NoArgsConstructor
 @Document("movies")
-public class Movie {
+public class Movie implements Serializable {
     @Id
     private ObjectId id;
     private String imdbId;
