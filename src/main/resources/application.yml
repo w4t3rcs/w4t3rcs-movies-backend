@@ -9,7 +9,7 @@ spring:
     type: redis
     cache-names: redis-cache
     redis:
-      time-to-live: 15m
+      time-to-live: 5m
   data:
     redis:
       host: ${REDIS_HOST}

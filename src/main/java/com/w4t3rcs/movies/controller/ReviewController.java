@@ -1,7 +1,7 @@
 package com.w4t3rcs.movies.controller;
 
 import com.w4t3rcs.movies.dto.document.ReviewDto;
-import com.w4t3rcs.movies.dto.request.ReviewRequest;
+import com.w4t3rcs.movies.dto.request.ReviewCreationRequest;
 import com.w4t3rcs.movies.service.data.ReviewService;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
@@ -28,8 +28,13 @@ public class ReviewController {
     }
 
     @PostMapping
-    public ResponseEntity<ReviewDto> postReview(@RequestBody ReviewRequest request) {
+    public ResponseEntity<ReviewDto> postReview(@RequestBody ReviewCreationRequest request) {
         return new ResponseEntity<>(reviewService.createReview(request), HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ReviewDto> putReview(@PathVariable ObjectId id, @RequestBody String body) {
+        return ResponseEntity.ok(reviewService.updateReview(id, body));
     }
 
     @DeleteMapping("/{id}")

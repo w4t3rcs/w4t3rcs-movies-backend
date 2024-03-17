@@ -5,12 +5,13 @@ import com.w4t3rcs.movies.dao.ReviewRepository;
 import com.w4t3rcs.movies.document.Movie;
 import com.w4t3rcs.movies.document.Review;
 import com.w4t3rcs.movies.dto.document.ReviewDto;
-import com.w4t3rcs.movies.dto.request.ReviewRequest;
+import com.w4t3rcs.movies.dto.request.ReviewCreationRequest;
 import com.w4t3rcs.movies.exception.MovieNotFoundException;
 import com.w4t3rcs.movies.exception.ReviewNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -45,11 +46,11 @@ public class ReviewService {
     }
 
     @Caching(cacheable = {
-            @Cacheable(value = "ReviewService::getReviewById", key = "#request.reviewDto.id != null ? #request.reviewDto.id : 'null'")
+            @Cacheable(value = "ReviewService::getReviewById", key = "#request.review.id != null ? #request.review.id : 'null'")
     })
     @Transactional
-    public ReviewDto createReview(ReviewRequest request) {
-        Review review = reviewRepository.save(request.getReviewDto().toReview());
+    public ReviewDto createReview(ReviewCreationRequest request) {
+        final Review review = reviewRepository.save(request.getReview());
         mongoTemplate.update(Movie.class)
                 .matching(Criteria.where("imdbId").is(request.getImdbId()))
                 .apply(new Update().push("reviewIds", review))
@@ -57,12 +58,21 @@ public class ReviewService {
         return ReviewDto.fromReview(review);
     }
 
+    @Caching(put = {
+            @CachePut(value = "ReviewService::getReviewById", key = "#id")
+    })
+    @Transactional
+    public ReviewDto updateReview(ObjectId id, String body) {
+        final Review review = reviewRepository.save(new Review(id, body));
+        return ReviewDto.fromReview(review);
+    }
+
     @CacheEvict(value = "ReviewService::getReviewById", key = "#id")
     @Transactional
     public ReviewDto deleteReview(ObjectId id) {
-        Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
+        final Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
         reviewRepository.delete(review);
-        Movie movie = movieRepository.findByReviewId(id).orElseThrow(MovieNotFoundException::new);
+        final Movie movie = movieRepository.findByReviewId(id).orElseThrow(MovieNotFoundException::new);
         movie.getReviewIds().remove(review);
         movieRepository.save(movie);
         return ReviewDto.fromReview(review);
