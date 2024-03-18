@@ -6,8 +6,7 @@ import com.w4t3rcs.movies.document.Movie;
 import com.w4t3rcs.movies.document.Review;
 import com.w4t3rcs.movies.dto.document.ReviewDto;
 import com.w4t3rcs.movies.dto.request.ReviewCreationRequest;
-import com.w4t3rcs.movies.exception.MovieNotFoundException;
-import com.w4t3rcs.movies.exception.ReviewNotFoundException;
+import com.w4t3rcs.movies.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.bson.types.ObjectId;
 import org.springframework.cache.annotation.CacheEvict;
@@ -41,7 +40,7 @@ public class ReviewService {
     @Transactional(readOnly = true)
     public ReviewDto getReviewById(ObjectId id) {
         final Review review = reviewRepository.findById(id)
-                .orElseThrow(ReviewNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
         return ReviewDto.fromReview(review);
     }
 
@@ -70,9 +69,9 @@ public class ReviewService {
     @CacheEvict(value = "ReviewService::getReviewById", key = "#id")
     @Transactional
     public ReviewDto deleteReview(ObjectId id) {
-        final Review review = reviewRepository.findById(id).orElseThrow(ReviewNotFoundException::new);
+        final Review review = reviewRepository.findById(id).orElseThrow(NotFoundException::new);
         reviewRepository.delete(review);
-        final Movie movie = movieRepository.findByReviewId(id).orElseThrow(MovieNotFoundException::new);
+        final Movie movie = movieRepository.findByReviewId(id).orElseThrow(NotFoundException::new);
         movie.getReviewIds().remove(review);
         movieRepository.save(movie);
         return ReviewDto.fromReview(review);

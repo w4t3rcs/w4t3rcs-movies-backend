@@ -3,7 +3,7 @@ package com.w4t3rcs.movies.service.data;
 import com.w4t3rcs.movies.dao.GenreRepository;
 import com.w4t3rcs.movies.document.Genre;
 import com.w4t3rcs.movies.dto.document.GenreDto;
-import com.w4t3rcs.movies.exception.GenreNotFoundException;
+import com.w4t3rcs.movies.exception.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class GenreService {
     @Transactional(readOnly = true)
     public GenreDto getGenreByName(String name) {
         final Genre genre = genreRepository.findByName(name)
-                .orElseThrow(GenreNotFoundException::new);
+                .orElseThrow(NotFoundException::new);
         return GenreDto.fromGenre(genre);
     }
 }
